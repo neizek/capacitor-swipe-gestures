@@ -1,16 +1,22 @@
-import Capacitor
 import UIKit
+import Capacitor
 
-@objc(SwipeGesturesPluginPlugin)
-public class SwipeGesturesPluginPlugin: CAPPlugin {
-    override public func load() {
+@objc(CustomViewPlugin)
+public class CustomViewPlugin: CAPPlugin {
+    @objc func showCustomView(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
-            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                let myViewController = MyViewController()
-                appDelegate.window = UIWindow(frame: UIScreen.main.bounds)
-                appDelegate.window?.rootViewController = myViewController
-                appDelegate.window?.makeKeyAndVisible()
+            guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let window = scene.windows.first else {
+                call.reject("No active window scene found")
+                return
             }
+
+            let customViewController = UIViewController()
+            customViewController.view.backgroundColor = .red // Example background color
+
+            window.rootViewController?.present(customViewController, animated: true, completion: nil)
+
+            call.resolve()
         }
     }
 }
