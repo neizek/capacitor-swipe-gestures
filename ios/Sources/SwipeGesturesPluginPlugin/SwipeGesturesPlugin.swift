@@ -1,8 +1,16 @@
-import Foundation
+import Capacitor
+import UIKit
 
-@objc public class SwipeGesturesPlugin: NSObject {
-    @objc public func echo(_ value: String) -> String {
-        print(value)
-        return value
+@objc(SwipeGesturesPluginPlugin)
+public class SwipeGesturesPluginPlugin: CAPPlugin {
+    override public func load() {
+        DispatchQueue.main.async {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                let myViewController = MyViewController()
+                appDelegate.window = UIWindow(frame: UIScreen.main.bounds)
+                appDelegate.window?.rootViewController = myViewController
+                appDelegate.window?.makeKeyAndVisible()
+            }
+        }
     }
 }
